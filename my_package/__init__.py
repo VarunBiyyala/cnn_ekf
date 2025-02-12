@@ -198,3 +198,31 @@ def display_predictions(X_test, predictions, num_samples=8):
 
     plt.tight_layout()
     plt.show()
+
+# Helper function to analize the re-training of weights
+def plot_weight_changes(mean_hist_before, mean_hist_after, legend_font_size=14):
+    input_dim = mean_hist_before[-1].shape[0]
+    num_weights = 20
+    num_cols = 1
+
+    fig, axs = plt.subplots(num_weights, num_cols, figsize=(20, num_weights * 4))
+
+    for k in range(num_weights):
+        ax = axs[k]
+        ax.plot(mean_hist_before[:, k], label=f"Before $w_{{{k}}}$", color='blue')
+        ax.plot(mean_hist_after[:, k], label=f"After $w_{{{k}}}$", color='red')
+
+        ax.set_xlim(1, len(mean_hist_before))
+        ax.set_xlabel("Ordered sample number", fontsize=15)
+        ax.set_ylabel("Weight value", fontsize=15)
+        ax.tick_params(axis="both", which="major", labelsize=15)
+        sns.despine()
+        ax.legend(frameon=False, fontsize=legend_font_size)
+
+    # Remove any unused subplots if there are fewer than num_weights
+    if num_weights < len(axs):
+        for j in range(num_weights, len(axs)):
+            fig.delaxes(axs[j])
+
+    plt.tight_layout()
+    plt.show()
